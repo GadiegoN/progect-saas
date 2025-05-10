@@ -13,7 +13,7 @@ import { ArrowRight } from "lucide-react";
 
 export function Professionals() {
   return (
-    <section className="flex flex-col h-full py-16">
+    <section className="flex flex-col h-full py-16" id="profissionais">
       <div className="flex flex-col px-4 mx-auto">
         <h2 className="text-3xl font-bold text-center">Clínicas disponíveis</h2>
         <p className="text-lg text-gray-600 text-center">
