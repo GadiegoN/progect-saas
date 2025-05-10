@@ -2,7 +2,7 @@ import Image from "next/image";
 import DoctorImg from "../../../../public/doctor-hero.png";
 export function Hero() {
   return (
-    <section className="flex">
+    <section className="flex bg-gray-50 pb-10 lg:pb-0 pt-16">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-center">
           <article className="flex-[2] max-w-3xl space-y-4 flex flex-col justify-center">
