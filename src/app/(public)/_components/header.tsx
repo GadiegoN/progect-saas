@@ -8,11 +8,22 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { LayoutDashboard, LogIn, Menu, UserSearch } from "lucide-react";
+import {
+  LayoutDashboard,
+  LogIn,
+  Menu,
+  ChevronLeft,
+  ChevronRight,
+  Calendar,
+  Folder,
+  User,
+  LogOut,
+} from "lucide-react";
 import { useState } from "react";
 
 interface NavLinkProps {
   name: string;
+  pathName: string;
   href: string;
   icon: React.ComponentType;
   isLoggedIn?: boolean;
@@ -21,30 +32,34 @@ interface NavLinkProps {
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const navItens: NavLinkProps[] = [
     {
-      name: "Profissionais",
-      href: "/#profissionais",
-      icon: UserSearch,
-    },
-    {
       name: "Dashboard",
+      pathName: "/dashboard",
       href: "/dashboard",
       icon: LayoutDashboard,
-      isLoggedIn: true,
     },
     {
       name: "Login",
+      pathName: "/login",
       href: "/login",
       icon: LogIn,
       isLoggedIn: false,
     },
+    {
+      name: "Sair",
+      pathName: "/logout",
+      href: "/logout",
+      icon: LogOut,
+      isLoggedIn: true,
+    },
   ];
 
-  const NavLinks = () => {
+  const NavLinks = ({ collapsed }: { collapsed: boolean }) => {
     return (
-      <ul className="flex flex-col md:flex-row gap-4">
+      <ul className="flex flex-col md:flex-row gap-8">
         {navItens
           .filter(
             (item) =>
@@ -57,8 +72,8 @@ export function Header() {
                 onClick={() => setIsOpen(false)}
                 className="hover:text-gray-400 transition duration-200 flex items-center gap-2"
               >
-                {item.icon && <item.icon />}
-                {item.name}
+                <item.icon />
+                {!collapsed && <span>{item.name}</span>}
               </Link>
             </li>
           ))}
@@ -72,24 +87,57 @@ export function Header() {
         <Link href="/" className="text-2xl font-bold">
           Gadiego<span className="text-emerald-500">PRO</span>
         </Link>
+
         <nav className="hidden md:flex space-x-8">
-          <NavLinks />
+          <NavLinks collapsed={false} />
         </nav>
 
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger className="bg-emerald-500 cursor-pointer text-white px-4 py-2 rounded-md hover:bg-emerald-600 transition duration-200 md:hidden">
             <Menu />
           </SheetTrigger>
-          <SheetContent className="w-8/12 sm:max-w-sm bg-white p-6 rounded-lg shadow-lg">
-            <SheetHeader>
-              <SheetTitle className="text-2xl font-bold">Login</SheetTitle>
-              <SheetDescription className="text-gray-600">
-                Veja nossos links.
-              </SheetDescription>
-            </SheetHeader>
-            <nav className="space-x-8">
-              <NavLinks />
-            </nav>
+
+          <SheetContent
+            side="right"
+            className={`transition-all duration-300 ease-in-out ${
+              isCollapsed ? "w-[80px]" : "w-64"
+            } bg-white p-4 flex flex-col justify-between`}
+          >
+            <div>
+              <SheetHeader>
+                {isCollapsed && (
+                  <SheetTitle className="text-2xl flex justify-center font-bold mb-2">
+                    G<span className="text-emerald-500">PRO</span>
+                  </SheetTitle>
+                )}
+                {!isCollapsed && (
+                  <>
+                    <SheetTitle className="text-2xl font-bold mb-2">
+                      Gadiego<span className="text-emerald-500">PRO</span>
+                    </SheetTitle>
+                    <SheetDescription className="text-gray-600">
+                      Menu de navegação
+                    </SheetDescription>
+                  </>
+                )}
+              </SheetHeader>
+
+              <nav
+                className={`mt-6 flex ${
+                  isCollapsed ? "justify-center" : "justify-start"
+                }
+            `}
+              >
+                <NavLinks collapsed={isCollapsed} />
+              </nav>
+            </div>
+
+            <button
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              className="mt-6 flex items-center justify-center w-full py-2 rounded-md text-gray-700 hover:bg-gray-100"
+            >
+              {!isCollapsed ? <ChevronRight /> : <ChevronLeft />}
+            </button>
           </SheetContent>
         </Sheet>
       </div>
