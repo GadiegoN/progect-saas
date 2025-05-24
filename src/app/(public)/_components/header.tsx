@@ -14,12 +14,12 @@ import {
   Menu,
   ChevronLeft,
   ChevronRight,
-  Calendar,
-  Folder,
-  User,
   LogOut,
 } from "lucide-react";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
+import { signIn, signOut } from "@/lib/auth";
+import { handleRegister } from "../_actions/login";
 
 interface NavLinkProps {
   name: string;
@@ -30,53 +30,59 @@ interface NavLinkProps {
 }
 
 export function Header() {
+  const { data: session, status } = useSession();
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  const navItens: NavLinkProps[] = [
-    {
-      name: "Dashboard",
-      pathName: "/dashboard",
-      href: "/dashboard",
-      icon: LayoutDashboard,
-    },
-    {
-      name: "Login",
-      pathName: "/login",
-      href: "/login",
-      icon: LogIn,
-      isLoggedIn: false,
-    },
-    {
-      name: "Sair",
-      pathName: "/logout",
-      href: "/logout",
-      icon: LogOut,
-      isLoggedIn: true,
-    },
-  ];
+  async function handleLogin(provider: string) {
+    setIsOpen(false);
+    await handleRegister("github");
+  }
 
   const NavLinks = ({ collapsed }: { collapsed: boolean }) => {
+    const isLoggedIn = status === "authenticated";
+
     return (
       <ul className="flex flex-col md:flex-row gap-8">
-        {navItens
-          .filter(
-            (item) =>
-              item.isLoggedIn === undefined || item.isLoggedIn === isLoggedIn
-          )
-          .map((item) => (
-            <li key={item.name}>
-              <Link
-                href={item.href}
-                onClick={() => setIsOpen(false)}
-                className="hover:text-gray-400 transition duration-200 flex items-center gap-2"
-              >
-                <item.icon />
-                {!collapsed && <span>{item.name}</span>}
-              </Link>
-            </li>
-          ))}
+        <li>
+          <Link
+            href="/dashboard"
+            onClick={() => setIsOpen(false)}
+            className="hover:text-gray-400 transition duration-200 flex items-center gap-2"
+          >
+            <LayoutDashboard />
+            {!collapsed && <span>Dashboard</span>}
+          </Link>
+        </li>
+
+        {!isLoggedIn && (
+          <li>
+            <button
+              onClick={() => {
+                handleLogin("github");
+              }}
+              className="hover:text-gray-400 transition duration-200 flex items-center gap-2"
+            >
+              <LogIn />
+              {!collapsed && <span>Login</span>}
+            </button>
+          </li>
+        )}
+
+        {isLoggedIn && (
+          <li>
+            <button
+              onClick={() => {
+                setIsOpen(false);
+                signOut();
+              }}
+              className="hover:text-gray-400 transition duration-200 flex items-center gap-2"
+            >
+              <LogOut />
+              {!collapsed && <span>Sair</span>}
+            </button>
+          </li>
+        )}
       </ul>
     );
   };
