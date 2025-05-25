@@ -62,29 +62,27 @@ export function ProfileContent({ user }: ProfileContentProps) {
   return (
     <div className="mx-auto">
       <Form {...form}>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <Card className="max-w-2xl">
-              <CardHeader>
-                <CardTitle className="text-xl p-4">Meu perfil</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <ProfileImage imageUrl={user.image ?? ""} />
-                <div className="space-y-4 p-4">
-                  <ProfileFormFields form={form} timeZones={timeZones} />
-                  <ScheduleDialog
-                    hours={hours}
-                    selectedHours={selectedHours}
-                    onToggle={toggleHour}
-                  />
-                  <Button className="w-full" type="submit">
-                    Salvar alterações
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </form>
-        </Form>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <Card className="w-full py-6">
+            <CardHeader>
+              <CardTitle className="text-xl p-4">Meu perfil</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <ProfileImage imageUrl={user.image ?? ""} />
+              <div className="space-y-4 p-4">
+                <ProfileFormFields form={form} timeZones={timeZones} />
+                <ScheduleDialog
+                  hours={hours}
+                  selectedHours={selectedHours}
+                  onToggle={toggleHour}
+                />
+                <Button className="w-full" type="submit">
+                  Salvar alterações
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </form>
       </Form>
     </div>
   );

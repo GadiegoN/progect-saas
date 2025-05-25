@@ -14,7 +14,7 @@ export default async function DashboardLayout({
     redirect("/");
   }
   return (
-    <div className="flex w-full min-h-screen bg-emerald-100">
+    <div className="flex w-full min-h-screen bg-gray-100">
       <SidebarDashboard>
         <Toaster duration={2500} />
         {children}
