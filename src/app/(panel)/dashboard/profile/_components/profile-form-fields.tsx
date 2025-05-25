@@ -14,9 +14,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+interface TimeZoneOption {
+  label: string;
+  value: string;
+}
+
 interface Props {
   form: any;
-  timeZones: string[];
+  timeZones: TimeZoneOption[];
 }
 
 export function ProfileFormFields({ form, timeZones }: Props) {
@@ -29,7 +34,7 @@ export function ProfileFormFields({ form, timeZones }: Props) {
           <FormItem>
             <FormLabel>Nome Completo</FormLabel>
             <FormControl>
-              <Input placeholder="Digite o nome da clinica" {...field} />
+              <Input placeholder="Digite o nome da clínica" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -95,8 +100,8 @@ export function ProfileFormFields({ form, timeZones }: Props) {
                 </SelectTrigger>
                 <SelectContent>
                   {timeZones.map((zone) => (
-                    <SelectItem key={zone} value={zone}>
-                      {zone}
+                    <SelectItem key={zone.value} value={zone.value}>
+                      {zone.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
