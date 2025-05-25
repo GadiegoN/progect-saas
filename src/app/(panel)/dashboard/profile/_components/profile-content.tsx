@@ -12,6 +12,9 @@ import { ProfileFormFields } from "./profile-form-fields";
 import { ScheduleDialog } from "./schedule-dialog";
 import { Subscription, User } from "@/generated/prisma";
 import { ProfileFormData, useProfileForm } from "@/hooks/use-profile-form";
+import { updateProfile } from "../_actions/update-profile";
+import { toast } from "sonner";
+import { extractPhoneNumber } from "@/utils/format-phone";
 
 interface ProfileContentProps {
   user: User & {
@@ -33,12 +36,27 @@ export function ProfileContent({ user }: ProfileContentProps) {
   const timeZones = brazilianTimeZones;
 
   async function onSubmit(values: ProfileFormData) {
-    const profileData = {
-      ...values,
-      times: selectedHours,
-    };
+    const extractValue = extractPhoneNumber(values.phone || "");
 
-    console.log("Form submitted with data:", { profileData });
+    const { name, address, phone, status, timezone } = values;
+    const response = await updateProfile({
+      name,
+      address,
+      phone: extractValue,
+      status: status === "active" ? true : false,
+      times: selectedHours || [],
+      timezone,
+    });
+
+    if (response.error) {
+      toast.error("Erro ao atualizar o perfil", { closeButton: true });
+      return;
+    }
+
+    if (response.success) {
+      toast.success("Peril atualizado com sucesso", { closeButton: true });
+      return;
+    }
   }
 
   return (

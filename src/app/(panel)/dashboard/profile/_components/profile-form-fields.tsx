@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { formatPhone } from "@/utils/format-phone";
 
 interface TimeZoneOption {
   label: string;
@@ -60,7 +61,14 @@ export function ProfileFormFields({ form, timeZones }: Props) {
           <FormItem>
             <FormLabel>Telefone</FormLabel>
             <FormControl>
-              <Input placeholder="Telefone" {...field} />
+              <Input
+                placeholder="(11) 99999-9999"
+                {...field}
+                onChange={(e) => {
+                  const formatted = formatPhone(e.target.value);
+                  field.onChange(formatted);
+                }}
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
