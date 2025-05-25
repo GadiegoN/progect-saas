@@ -20,7 +20,7 @@ interface ProfileContentProps {
 }
 
 export function ProfileContent({ user }: ProfileContentProps) {
-  const { selectedHours, toggleHour } = useSelectedHours();
+  const { selectedHours, toggleHour } = useSelectedHours(user.times ?? []);
   const form = useProfileForm({
     address: user.address || null,
     name: user.name || null,
@@ -48,10 +48,10 @@ export function ProfileContent({ user }: ProfileContentProps) {
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <Card className="max-w-2xl">
               <CardHeader>
-                <CardTitle>Meu perfil</CardTitle>
+                <CardTitle className="text-xl p-4">Meu perfil</CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                <ProfileImage />
+                <ProfileImage imageUrl={user.image ?? ""} />
                 <div className="space-y-4 p-4">
                   <ProfileFormFields form={form} timeZones={timeZones} />
                   <ScheduleDialog
