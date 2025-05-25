@@ -1,6 +1,7 @@
 import getSession from "@/lib/get-session";
 import { redirect } from "next/navigation";
 import { getUserData } from "./_data-access/get-info-user";
+import { ProfileContent } from "./_components/profile-content";
 
 export default async function Profile() {
   const session = await getSession();
@@ -18,6 +19,8 @@ export default async function Profile() {
   return (
     <main>
       <h1 className="text-3xl font-bold underline">Hello Profile!</h1>
+
+      <ProfileContent />
     </main>
   );
 }
