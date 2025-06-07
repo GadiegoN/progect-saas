@@ -26,13 +26,25 @@ import { createNewService } from "../_actions/create-service";
 import { toast } from "sonner";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import { updateService } from "../_actions/update-service";
 
 interface ServiceDialogProps {
   closeModal: () => void;
+  serviceId?: string;
+  initialValues?: {
+    name: string;
+    price: string;
+    hours: string;
+    minutes: string;
+  };
 }
 
-export function ServiceDialog({ closeModal }: ServiceDialogProps) {
-  const form = useDialogServiceForm();
+export function ServiceDialog({
+  closeModal,
+  serviceId,
+  initialValues,
+}: ServiceDialogProps) {
+  const form = useDialogServiceForm({ initialValues });
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -43,6 +55,19 @@ export function ServiceDialog({ closeModal }: ServiceDialogProps) {
     const minutes = parseInt(values.minutes) || 0;
 
     const duration = hours * 60 + minutes;
+
+    if (serviceId) {
+      await editServiceById({
+        serviceId: serviceId,
+        name: values.name,
+        priceInCents: priceInCents,
+        duration: duration,
+      });
+
+      setLoading(false);
+
+      return;
+    }
 
     const response = await createNewService({
       name: values.name,
@@ -60,6 +85,35 @@ export function ServiceDialog({ closeModal }: ServiceDialogProps) {
     toast.success("Serviço cadastrado com sucesso!");
 
     handleCloseModal();
+  }
+
+  async function editServiceById({
+    serviceId,
+    name,
+    priceInCents,
+    duration,
+  }: {
+    serviceId: string;
+    name: string;
+    priceInCents: number;
+    duration: number;
+  }) {
+    const response = await updateService({
+      serviceId,
+      name,
+      price: priceInCents,
+      duration,
+    });
+
+    setLoading(false);
+
+    if (response.error) {
+      toast.error(response.error);
+
+      return;
+    }
+
+    toast.success(response.data);
   }
 
   function handleCloseModal() {
@@ -164,7 +218,7 @@ export function ServiceDialog({ closeModal }: ServiceDialogProps) {
             {loading ? (
               <Loader2 className="animate-spin" />
             ) : (
-              "Adicionar serviço"
+              `${serviceId ? "Atualizar serviço" : "Cadastrar serviço"}`
             )}
           </Button>
         </form>
