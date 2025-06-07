@@ -23,6 +23,8 @@ import { ServiceDialog } from "./service-dialog";
 import { useState } from "react";
 import { Service } from "@/generated/prisma";
 import { currencyFormat } from "@/utils/format-currency";
+import { deleteService } from "../_actions/delete-service";
+import { toast } from "sonner";
 
 interface ServicesListProps {
   services: Service[];
@@ -30,6 +32,18 @@ interface ServicesListProps {
 
 export function ServiceList({ services }: ServicesListProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  async function handleDeleteService(serviceId: string) {
+    const response = await deleteService({ serviceId: serviceId });
+
+    if (response.error) {
+      toast.error(response.error);
+
+      return;
+    }
+
+    toast.success(response.data);
+  }
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -55,11 +69,11 @@ export function ServiceList({ services }: ServicesListProps) {
           </CardHeader>
 
           <CardContent>
-            <section className="space-y-4">
+            <section>
               {services.map((service) => (
                 <article
                   key={service.id}
-                  className="flex justify-between items-center p-2 border-b"
+                  className="flex justify-between items-center p-2 border-b hover:bg-gray-50 rounded-b-md"
                 >
                   <div className="flex items-center space-x-2">
                     <span className="font-medium line-clamp-1 truncate max-w-48 md:max-w-64 lg:max-w-96">
@@ -72,13 +86,25 @@ export function ServiceList({ services }: ServicesListProps) {
                   </div>
 
                   <div className="flex gap-1 items-center">
-                    <Button variant="ghost" size="icon">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      type="button"
+                      onClick={() => {}}
+                    >
                       <Pencil className="text-indigo-400" />
                     </Button>
 
                     <div className="h-8 border" />
 
-                    <Button variant="ghost" size="icon">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      type="button"
+                      onClick={() => {
+                        handleDeleteService(service.id);
+                      }}
+                    >
                       <Trash2 className="text-red-400" />
                     </Button>
                   </div>
