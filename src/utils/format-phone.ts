@@ -1,3 +1,13 @@
+/**
+ * Formata uma string numérica como número de telefone brasileiro.
+ *
+ * Exemplo:
+ * - Entrada: "11987654321"
+ * - Saída: "(11) 98765-4321"
+ *
+ * @param {string} value - Valor contendo o número de telefone, possivelmente com caracteres não numéricos.
+ * @returns Número de telefone formatado no padrão brasileiro.
+ */
 export function formatPhone(value: string) {
   const cleaned = value.replace(/\D/g, "");
 
