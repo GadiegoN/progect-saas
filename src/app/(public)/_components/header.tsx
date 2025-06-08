@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { signIn, signOut } from "@/lib/auth";
+import { signOut } from "@/lib/auth";
 import { handleRegister } from "../_actions/login";
 
 interface NavLinkProps {
@@ -91,7 +91,7 @@ export function Header() {
     <header className="fixed top-0 left-0 right-0 bg-secondary p-4 shadow-md z-50">
       <div className="container flex justify-between items-center mx-auto">
         <Link href="/" className="text-2xl font-bold">
-          Gadiego<span className="text-primary">PRO</span>
+          <span className="text-primary">CON</span>TEMP
         </Link>
 
         <nav className="hidden md:flex space-x-8">
@@ -119,7 +119,7 @@ export function Header() {
                 {!isCollapsed && (
                   <>
                     <SheetTitle className="text-2xl font-bold mb-2">
-                      Gadiego<span className="text-primary">PRO</span>
+                      <span className="text-primary">CON</span>TEMP
                     </SheetTitle>
                     <SheetDescription className="text-gray-600">
                       Menu de navegação

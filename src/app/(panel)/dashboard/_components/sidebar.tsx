@@ -23,6 +23,7 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import logoImage from "../../../../../public/logo-odonto.png";
+import { LogoTempCon } from "@/components/ui/logo";
 
 interface NavLinkProps {
   name: string;
@@ -101,15 +102,8 @@ export function SidebarDashboard({ children }: { children: ReactNode }) {
           }
         )}
       >
-        <div className="mb-6 mt-4">
-          <Image
-            src={logoImage}
-            alt="Logo"
-            priority
-            quality={100}
-            width={isCollapsed ? 40 : 150}
-            height={isCollapsed ? 40 : 150}
-          />
+        <div className="mb-6 mt-4 flex justify-center">
+          <LogoTempCon colapsed={isCollapsed} />
         </div>
 
         <button
@@ -161,7 +155,7 @@ export function SidebarDashboard({ children }: { children: ReactNode }) {
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <div className="flex items-center justify-between gap-4 p-4">
               <Link href="/" className="text-2xl font-bold">
-                Gadiego<span className="text-primary">PRO</span>
+                <span className="text-primary">CON</span>TEMP
               </Link>
 
               <SheetTrigger asChild>
@@ -181,12 +175,12 @@ export function SidebarDashboard({ children }: { children: ReactNode }) {
                 <SheetHeader>
                   {isCollapsed ? (
                     <SheetTitle className="text-2xl flex justify-center font-bold mb-2">
-                      G<span className="text-primary">PRO</span>
+                      <span className="text-primary">CON</span>T
                     </SheetTitle>
                   ) : (
                     <>
                       <SheetTitle className="text-2xl font-bold mb-2">
-                        Gadiego<span className="text-primary">PRO</span>
+                        <span className="text-primary">CON</span>TEMP
                       </SheetTitle>
                       <SheetDescription className="text-gray-600">
                         Menu de navegação
