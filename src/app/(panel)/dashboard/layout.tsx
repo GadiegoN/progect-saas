@@ -1,7 +1,6 @@
 import { SidebarDashboard } from "./_components/sidebar";
 import getSession from "@/lib/get-session";
 import { redirect } from "next/navigation";
-import { Toaster } from "sonner";
 
 export default async function DashboardLayout({
   children,
@@ -15,10 +14,7 @@ export default async function DashboardLayout({
   }
   return (
     <div className="flex w-full min-h-screen bg-gray-100">
-      <SidebarDashboard>
-        <Toaster duration={2500} />
-        {children}
-      </SidebarDashboard>
+      <SidebarDashboard>{children}</SidebarDashboard>
     </div>
   );
 }

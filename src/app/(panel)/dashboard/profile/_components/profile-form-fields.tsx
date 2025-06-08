@@ -62,7 +62,7 @@ export function ProfileFormFields({ form, timeZones }: Props) {
             <FormLabel>Telefone</FormLabel>
             <FormControl>
               <Input
-                placeholder="(11) 99999-9999"
+                placeholder="(XX) XXXXX-XXXX"
                 {...field}
                 onChange={(e) => {
                   const formatted = formatPhone(e.target.value);
