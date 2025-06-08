@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { useSelectedHours } from "@/hooks/use-selected-hours";
 import { generateTimeSlots } from "@/lib/time";
 import { brazilianTimeZones } from "@/lib/timezones";
-import { ProfileImage } from "./profile-image";
 import { ProfileFormFields } from "./profile-form-fields";
 import { ScheduleDialog } from "./schedule-dialog";
 import { Subscription, User } from "@/generated/prisma";
@@ -15,6 +14,9 @@ import { ProfileFormData, useProfileForm } from "@/hooks/use-profile-form";
 import { updateProfile } from "../_actions/update-profile";
 import { toast } from "sonner";
 import { extractPhoneNumber } from "@/utils/format-phone";
+import { signOut, useSession } from "next-auth/react";
+import { redirect, useRouter } from "next/navigation";
+import { ProfileImage } from "@/components/ui/profile-image";
 
 interface ProfileContentProps {
   user: User & {
@@ -23,7 +25,11 @@ interface ProfileContentProps {
 }
 
 export function ProfileContent({ user }: ProfileContentProps) {
+  const router = useRouter();
   const { selectedHours, toggleHour } = useSelectedHours(user.times ?? []);
+
+  const { update } = useSession();
+
   const form = useProfileForm({
     address: user.address || null,
     name: user.name || null,
@@ -34,6 +40,13 @@ export function ProfileContent({ user }: ProfileContentProps) {
 
   const hours = generateTimeSlots();
   const timeZones = brazilianTimeZones;
+
+  async function handleLogout() {
+    await signOut();
+    await update();
+
+    router.push("/");
+  }
 
   async function onSubmit(values: ProfileFormData) {
     const extractValue = extractPhoneNumber(values.phone || "");
@@ -78,6 +91,15 @@ export function ProfileContent({ user }: ProfileContentProps) {
                 />
                 <Button className="w-full" type="submit">
                   Salvar alterações
+                </Button>
+              </div>
+              <div className="px-4">
+                <Button
+                  className="w-full"
+                  variant="destructive"
+                  onClick={handleLogout}
+                >
+                  Sair da conta
                 </Button>
               </div>
             </CardContent>
