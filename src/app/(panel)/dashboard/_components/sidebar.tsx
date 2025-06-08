@@ -10,11 +10,7 @@ import {
   SheetDescription,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+
 import {
   Menu,
   ChevronLeft,
@@ -77,8 +73,8 @@ export function SidebarDashboard({ children }: { children: ReactNode }) {
               href={item.href}
               onClick={() => setIsOpen(false)}
               className={clsx(
-                "hover:text-gray-400 transition duration-200 flex items-center gap-2",
-                isActive ? "text-emerald-500 font-semibold" : "text-gray-800"
+                "hover:text-primary transition duration-200 flex items-center gap-2",
+                isActive ? "text-primary font-semibold" : "text-gray-800"
               )}
             >
               <item.icon />
@@ -118,7 +114,7 @@ export function SidebarDashboard({ children }: { children: ReactNode }) {
 
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="bg-gray-100 hover:bg-gray-50 text-zinc-900 self-end rounded-md cursor-pointer transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
+          className="bg-gray-100 hover:bg-secondary text-primary self-end rounded-md cursor-pointer transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
         >
           {isCollapsed ? (
             <ChevronRight className="size-6" />
@@ -141,10 +137,8 @@ export function SidebarDashboard({ children }: { children: ReactNode }) {
                     href={item.href}
                     onClick={() => setIsOpen(false)}
                     className={clsx(
-                      "hover:text-gray-400 transition duration-200 flex items-center gap-2",
-                      isActive
-                        ? "text-emerald-500 font-semibold"
-                        : "text-gray-800"
+                      "hover:text-primary transition duration-200 flex items-center gap-2",
+                      isActive ? "text-primary font-semibold" : "text-gray-800"
                     )}
                   >
                     <item.icon />
@@ -163,15 +157,15 @@ export function SidebarDashboard({ children }: { children: ReactNode }) {
           "md:ml-64": !isCollapsed,
         })}
       >
-        <header className="md:hidden bg-gray-800">
+        <header className="md:hidden bg-secondary">
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <div className="flex items-center justify-between gap-4 p-4">
-              <Link href="/" className="text-2xl text-gray-200 font-bold">
-                Gadiego<span className="text-emerald-500">PRO</span>
+              <Link href="/" className="text-2xl font-bold">
+                Gadiego<span className="text-primary">PRO</span>
               </Link>
 
               <SheetTrigger asChild>
-                <button className="flex items-center cursor-pointer justify-center md:hidden w-10 h-10 p-2 text-gray-500 bg-white rounded-md shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
+                <button className="flex items-center cursor-pointer justify-center md:hidden w-10 h-10 p-2 text-gray-500 bg-white rounded-md shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
                   <Menu />
                 </button>
               </SheetTrigger>
@@ -187,12 +181,12 @@ export function SidebarDashboard({ children }: { children: ReactNode }) {
                 <SheetHeader>
                   {isCollapsed ? (
                     <SheetTitle className="text-2xl flex justify-center font-bold mb-2">
-                      G<span className="text-emerald-500">PRO</span>
+                      G<span className="text-primary">PRO</span>
                     </SheetTitle>
                   ) : (
                     <>
                       <SheetTitle className="text-2xl font-bold mb-2">
-                        Gadiego<span className="text-emerald-500">PRO</span>
+                        Gadiego<span className="text-primary">PRO</span>
                       </SheetTitle>
                       <SheetDescription className="text-gray-600">
                         Menu de navegação

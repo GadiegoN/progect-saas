@@ -5,7 +5,7 @@ export function Footer() {
         <p className="text-center text-gray-600">
           &copy; {new Date().getFullYear()}{" "}
           <span className="font-bold">
-            Gadiego<span className="text-emerald-500">Pro</span>
+            Gadiego<span className="text-primary">Pro</span>
           </span>
           . Todos os direitos reservados.
         </p>

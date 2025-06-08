@@ -17,7 +17,7 @@ export function Hero() {
               o melhor para você.
             </p>
 
-            <button className="bg-emerald-500 cursor-pointer w-fit text-white font-semibold px-4 py-2 rounded-md hover:bg-emerald-600 transition duration-200">
+            <button className="bg-primary cursor-pointer w-fit text-white font-semibold px-4 py-2 rounded-md hover:bg-primary transition duration-200">
               Encontre uma clinica
             </button>
           </article>

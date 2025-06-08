@@ -143,7 +143,7 @@ export function ScheduleContent({ clinic }: ScheduleContentProps) {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <div className="h-32 bg-emerald-500" />
+      <div className="h-32 bg-primary" />
 
       <section className="container mx-auto px-4 -mt-16">
         <div className="max-w-2xl mx-auto">
@@ -229,6 +229,7 @@ export function ScheduleContent({ clinic }: ScheduleContentProps) {
                       onChange={(date) => {
                         if (date) {
                           field.onChange(date);
+                          setSelectedTime("");
                         }
                       }}
                     />
@@ -244,7 +245,13 @@ export function ScheduleContent({ clinic }: ScheduleContentProps) {
                 <FormItem>
                   <Label>Serviço</Label>
                   <FormControl>
-                    <Select onValueChange={field.onChange} value={field.value}>
+                    <Select
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                        setSelectedTime("");
+                      }}
+                      value={field.value}
+                    >
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Selecione o serviço" />
                       </SelectTrigger>

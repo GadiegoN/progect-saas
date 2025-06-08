@@ -41,12 +41,12 @@ export function Professionals() {
                     </p>
                   </div>
 
-                  <div className="size-2.5 rounded-full bg-emerald-500" />
+                  <div className="size-2.5 rounded-full bg-primary" />
                 </div>
 
                 <Link
                   href="/agendar"
-                  className="flex bg-emerald-500 cursor-pointer justify-center text-white font-semibold px-4 py-2 rounded-md hover:bg-emerald-600 transition duration-200"
+                  className="flex bg-primary cursor-pointer justify-center text-white font-semibold px-4 py-2 rounded-md hover:bg-primary transition duration-200"
                 >
                   Agendar Horario
                   <ArrowRight />

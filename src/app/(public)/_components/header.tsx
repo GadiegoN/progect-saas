@@ -48,7 +48,7 @@ export function Header() {
           <Link
             href="/dashboard"
             onClick={() => setIsOpen(false)}
-            className="hover:text-gray-400 transition duration-200 flex items-center gap-2"
+            className="hover:text-primary transition duration-200 flex items-center gap-2"
           >
             <LayoutDashboard />
             {!collapsed && <span>Dashboard</span>}
@@ -61,7 +61,7 @@ export function Header() {
               onClick={() => {
                 handleLogin("github");
               }}
-              className="hover:text-gray-400 transition duration-200 flex items-center gap-2"
+              className="hover:text-primary cursor-pointer transition duration-200 flex items-center gap-2"
             >
               <LogIn />
               {!collapsed && <span>Login</span>}
@@ -76,7 +76,7 @@ export function Header() {
                 setIsOpen(false);
                 signOut();
               }}
-              className="hover:text-gray-400 transition duration-200 flex items-center gap-2"
+              className="hover:text-primary transition duration-200 flex items-center gap-2"
             >
               <LogOut />
               {!collapsed && <span>Sair</span>}
@@ -88,10 +88,10 @@ export function Header() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 bg-gray-800 text-white p-4 shadow-md z-50">
+    <header className="fixed top-0 left-0 right-0 bg-secondary p-4 shadow-md z-50">
       <div className="container flex justify-between items-center mx-auto">
         <Link href="/" className="text-2xl font-bold">
-          Gadiego<span className="text-emerald-500">PRO</span>
+          Gadiego<span className="text-primary">PRO</span>
         </Link>
 
         <nav className="hidden md:flex space-x-8">
@@ -99,7 +99,7 @@ export function Header() {
         </nav>
 
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetTrigger className="bg-emerald-500 cursor-pointer text-white px-4 py-2 rounded-md hover:bg-emerald-600 transition duration-200 md:hidden">
+          <SheetTrigger className="bg-primary cursor-pointer text-white px-4 py-2 rounded-md hover:bg-primary transition duration-200 md:hidden">
             <Menu />
           </SheetTrigger>
 
@@ -113,13 +113,13 @@ export function Header() {
               <SheetHeader>
                 {isCollapsed && (
                   <SheetTitle className="text-2xl flex justify-center font-bold mb-2">
-                    G<span className="text-emerald-500">PRO</span>
+                    G<span className="text-primary">PRO</span>
                   </SheetTitle>
                 )}
                 {!isCollapsed && (
                   <>
                     <SheetTitle className="text-2xl font-bold mb-2">
-                      Gadiego<span className="text-emerald-500">PRO</span>
+                      Gadiego<span className="text-primary">PRO</span>
                     </SheetTitle>
                     <SheetDescription className="text-gray-600">
                       Menu de navegação
@@ -140,7 +140,7 @@ export function Header() {
 
             <button
               onClick={() => setIsCollapsed(!isCollapsed)}
-              className="mt-6 flex items-center justify-center w-full py-2 rounded-md text-gray-700 hover:bg-gray-100"
+              className="mt-6 flex items-center justify-center cursor-pointer w-full py-2 rounded-md text-primary hover:bg-secondary"
             >
               {!isCollapsed ? <ChevronRight /> : <ChevronLeft />}
             </button>
