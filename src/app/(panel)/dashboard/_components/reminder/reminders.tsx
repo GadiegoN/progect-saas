@@ -6,10 +6,5 @@ export async function Reminders({ userId }: { userId: string }) {
 
   console.log("Lembretes encontrados: ", reminders);
 
-  return (
-    <div>
-      <h1>Lembretes</h1>
-      <ReminderList reminder={reminders} />
-    </div>
-  );
+  return <ReminderList reminder={reminders} />;
 }
