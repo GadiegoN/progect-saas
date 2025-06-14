@@ -31,6 +31,7 @@ import { Label } from "@/components/ui/label";
 import { ScheduleTimeList } from "./schedule-time-list";
 import { createNewAppointment } from "../_actions/create-appointments";
 import { toast } from "sonner";
+import { Loading } from "@/components/ui/loading";
 
 type UserWithServiceAndSubscription = Prisma.UserGetPayload<{
   include: {
@@ -279,12 +280,7 @@ export function ScheduleContent({ clinic }: ScheduleContentProps) {
 
                 <div className="bg-gray-100 p-4 rounded-lg">
                   {loadingSlots ? (
-                    <>
-                      <p className="text-center text-gray-700 font-semibold">
-                        Carregando horários
-                      </p>
-                      <Loader className="animate-spin mx-auto" />
-                    </>
+                    <Loading />
                   ) : availableTimeSlots.length === 0 ? (
                     <>
                       <p className="text-center text-gray-700 font-semibold">

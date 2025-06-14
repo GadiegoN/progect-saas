@@ -27,6 +27,7 @@ import { toast } from "sonner";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { updateService } from "../_actions/update-service";
+import { Loading } from "@/components/ui/loading";
 
 interface ServiceDialogProps {
   closeModal: () => void;
@@ -216,7 +217,7 @@ export function ServiceDialog({
 
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? (
-              <Loader2 className="animate-spin" />
+              <Loading />
             ) : (
               `${serviceId ? "Atualizar serviço" : "Cadastrar serviço"}`
             )}

@@ -1,29 +1,29 @@
 "use client";
+
 import { usePathname } from "next/navigation";
 import { ReactNode, useState } from "react";
 import clsx from "clsx";
+import Link from "next/link";
+import { LogoTempCon } from "@/components/ui/logo";
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
-  SheetDescription,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
 
 import {
   Menu,
   ChevronLeft,
   ChevronRight,
-  LayoutDashboard,
   Calendar,
   Folder,
   User,
+  Banknote,
 } from "lucide-react";
-import Link from "next/link";
-import Image from "next/image";
-import logoImage from "../../../../../public/logo-odonto.png";
-import { LogoTempCon } from "@/components/ui/logo";
 
 interface NavLinkProps {
   name: string;
@@ -32,23 +32,11 @@ interface NavLinkProps {
   icon: React.ComponentType;
 }
 
-const navItems: NavLinkProps[] = [
-  {
-    name: "Dashboard",
-    pathName: "/dashboard",
-    href: "/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    name: "Perfil",
-    pathName: "/dashboard/profile",
-    href: "/dashboard/profile",
-    icon: User,
-  },
+const dashboardNavItems: NavLinkProps[] = [
   {
     name: "Agendamentos",
-    pathName: "/dashboard/appointments",
-    href: "/dashboard/appointments",
+    pathName: "/dashboard",
+    href: "/dashboard",
     icon: Calendar,
   },
   {
@@ -59,98 +47,140 @@ const navItems: NavLinkProps[] = [
   },
 ];
 
-export function SidebarDashboard({ children }: { children: ReactNode }) {
-  const pathname = usePathname();
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+const settingsNavItems: NavLinkProps[] = [
+  {
+    name: "Perfil",
+    pathName: "/dashboard/profile",
+    href: "/dashboard/profile",
+    icon: User,
+  },
+  {
+    name: "Planos",
+    pathName: "/dashboard/plans",
+    href: "/dashboard/plans",
+    icon: Banknote,
+  },
+];
 
-  const NavLinks = ({ collapsed }: { collapsed: boolean }) => (
-    <ul className="flex flex-col md:flex-row gap-8">
-      {navItems.map((item) => {
-        const isActive = pathname === item.pathName;
+function NavigationGroup({
+  title,
+  items,
+  collapsed,
+  pathname,
+  onClick,
+}: {
+  title: string;
+  items: NavLinkProps[];
+  collapsed: boolean;
+  pathname: string;
+  onClick?: () => void;
+}) {
+  return (
+    <>
+      {!collapsed && (
+        <li className="text-xs text-muted-foreground font-bold uppercase tracking-wider px-2 mt-6">
+          {title}
+        </li>
+      )}
+      {items.map(({ name, href, icon: Icon, pathName }) => {
+        const isActive = pathname === pathName;
         return (
-          <li key={item.name}>
+          <li key={name}>
             <Link
-              href={item.href}
-              onClick={() => setIsOpen(false)}
+              href={href}
+              onClick={onClick}
               className={clsx(
                 "hover:text-primary transition duration-200 flex items-center gap-2",
                 isActive ? "text-primary font-semibold" : "text-gray-800"
               )}
             >
-              <item.icon />
-              {!collapsed && <span>{item.name}</span>}
+              <Icon />
+              {!collapsed && <span>{name}</span>}
             </Link>
           </li>
         );
       })}
-    </ul>
+    </>
   );
+}
+
+function NavLinks({
+  collapsed,
+  pathname,
+  onLinkClick,
+}: {
+  collapsed: boolean;
+  pathname: string;
+  onLinkClick?: () => void;
+}) {
+  return (
+    <nav
+      className={clsx(
+        "flex gap-1 mt-8 overflow-hidden",
+        collapsed && "mx-auto"
+      )}
+    >
+      <ul className="flex flex-col gap-6">
+        <NavigationGroup
+          title="Dashboard"
+          items={dashboardNavItems}
+          collapsed={collapsed}
+          pathname={pathname}
+          onClick={onLinkClick}
+        />
+        <NavigationGroup
+          title="Configurações"
+          items={settingsNavItems}
+          collapsed={collapsed}
+          pathname={pathname}
+          onClick={onLinkClick}
+        />
+      </ul>
+    </nav>
+  );
+}
+
+export function SidebarDashboard({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleCollapse = () => setIsCollapsed((prev) => !prev);
 
   return (
     <div className="flex min-h-screen w-full">
+      {/* Desktop Sidebar */}
       <aside
         className={clsx(
-          "flex flex-col border-r bg-background transition-all duration-300 p-4 h-full",
-          {
-            "w-20": isCollapsed,
-            "w-64": !isCollapsed,
-            "hidden md:flex md:fixed": true,
-            "md:top-0 md:left-0 md:h-screen": true,
-            "md:overflow-hidden": true,
-            "flex md:w-64": !isCollapsed,
-          }
+          "hidden md:flex md:fixed md:top-0 md:left-0 md:h-screen md:overflow-hidden flex-col border-r bg-background transition-all duration-300 p-4",
+          isCollapsed ? "w-20" : "w-64"
         )}
       >
         <div className="mb-6 mt-4 flex justify-center">
           <LogoTempCon colapsed={isCollapsed} />
         </div>
 
-        <button
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          className="bg-gray-100 hover:bg-secondary text-primary self-end rounded-md cursor-pointer transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-        >
-          {isCollapsed ? (
-            <ChevronRight className="size-6" />
-          ) : (
-            <ChevronLeft className="size-6" />
-          )}
-        </button>
-        <nav
-          className={clsx(
-            "flex gap-1 mt-8 overflow-hidden",
-            isCollapsed ? "mx-auto" : ""
-          )}
-        >
-          <ul className="flex flex-col gap-8">
-            {navItems.map((item) => {
-              const isActive = pathname === item.pathName;
-              return (
-                <li key={item.name}>
-                  <Link
-                    href={item.href}
-                    onClick={() => setIsOpen(false)}
-                    className={clsx(
-                      "hover:text-primary transition duration-200 flex items-center gap-2",
-                      isActive ? "text-primary font-semibold" : "text-gray-800"
-                    )}
-                  >
-                    <item.icon />
-                    {!isCollapsed && <span>{item.name}</span>}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+        <div className="flex justify-center">
+          <Button
+            onClick={toggleCollapse}
+            title={isCollapsed ? "Expandir" : "Recolher"}
+            variant="outline"
+          >
+            {isCollapsed ? <ChevronRight /> : <ChevronLeft />}
+          </Button>
+        </div>
+
+        <NavLinks collapsed={isCollapsed} pathname={pathname} />
       </aside>
 
+      {/* Main Content Area */}
       <div
         className={clsx("flex flex-1 flex-col transition-all duration-300", {
           "md:ml-20": isCollapsed,
           "md:ml-64": !isCollapsed,
         })}
       >
+        {/* Mobile Header */}
         <header className="md:hidden bg-secondary">
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <div className="flex items-center justify-between gap-4 p-4">
@@ -159,7 +189,7 @@ export function SidebarDashboard({ children }: { children: ReactNode }) {
               </Link>
 
               <SheetTrigger asChild>
-                <button className="flex items-center cursor-pointer justify-center md:hidden w-10 h-10 p-2 text-gray-500 bg-white rounded-md shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                <button className="flex items-center cursor-pointer justify-center w-10 h-10 p-2 text-gray-500 bg-white rounded-md shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
                   <Menu />
                 </button>
               </SheetTrigger>
@@ -167,43 +197,24 @@ export function SidebarDashboard({ children }: { children: ReactNode }) {
 
             <SheetContent
               side="right"
-              className={`transition-all duration-300 ease-in-out ${
-                isCollapsed ? "w-[80px]" : "w-64"
-              } bg-white p-4 flex flex-col justify-between`}
+              className="w-64 bg-white p-4 flex flex-col justify-between"
             >
               <div>
                 <SheetHeader>
-                  {isCollapsed ? (
-                    <SheetTitle className="text-2xl flex justify-center font-bold mb-2">
-                      <span className="text-primary">CON</span>T
-                    </SheetTitle>
-                  ) : (
-                    <>
-                      <SheetTitle className="text-2xl font-bold mb-2">
-                        <span className="text-primary">CON</span>TEMP
-                      </SheetTitle>
-                      <SheetDescription className="text-gray-600">
-                        Menu de navegação
-                      </SheetDescription>
-                    </>
-                  )}
+                  <SheetTitle className="text-2xl font-bold mb-2">
+                    <span className="text-primary">CON</span>TEMP
+                  </SheetTitle>
+                  <SheetDescription className="text-gray-600">
+                    Menu de navegação
+                  </SheetDescription>
                 </SheetHeader>
 
-                <nav
-                  className={`mt-6 flex ${
-                    isCollapsed ? "justify-center" : "justify-start"
-                  }`}
-                >
-                  <NavLinks collapsed={isCollapsed} />
-                </nav>
+                <NavLinks
+                  collapsed={false}
+                  pathname={pathname}
+                  onLinkClick={() => setIsOpen(false)}
+                />
               </div>
-
-              <button
-                onClick={() => setIsCollapsed(!isCollapsed)}
-                className="mt-6 flex items-center justify-center w-full py-2 rounded-md text-gray-700 hover:bg-gray-100"
-              >
-                {!isCollapsed ? <ChevronRight /> : <ChevronLeft />}
-              </button>
             </SheetContent>
           </Sheet>
         </header>

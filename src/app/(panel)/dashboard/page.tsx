@@ -6,6 +6,8 @@ import { redirect } from "next/navigation";
 import { ButtonCopyLink } from "./_components/button-copy-link";
 import { Reminders } from "./_components/reminder/reminders";
 import { Appointments } from "./_components/appointments/appointments";
+import { Suspense } from "react";
+import { Loading } from "@/components/ui/loading";
 
 export default async function Dashboard() {
   const session = await getSession();
@@ -15,7 +17,7 @@ export default async function Dashboard() {
   }
 
   return (
-    <main>
+    <Suspense fallback={<Loading />}>
       <div className="flex gap-2 items-center justify-end">
         <Link href={`/clinic/${session.user?.id}`} target="_blank">
           <Button
@@ -34,6 +36,6 @@ export default async function Dashboard() {
         <Appointments userId={session.user?.id} />
         <Reminders userId={session.user?.id} />
       </section>
-    </main>
+    </Suspense>
   );
 }

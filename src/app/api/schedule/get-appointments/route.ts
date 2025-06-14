@@ -61,8 +61,6 @@ export async function GET(req: NextRequest) {
       const requiredSlots = Math.ceil(apt.service.duration / 30);
       const startIndex = user.times.indexOf(apt.time);
 
-      console.log("Inicio: ", startIndex);
-
       if (startIndex !== -1) {
         for (let i = 0; i < requiredSlots; i++) {
           const bloquedSlot = user.times[startIndex + i];
@@ -75,8 +73,6 @@ export async function GET(req: NextRequest) {
     }
 
     const blockedTimes = Array.from(blockedSlots);
-
-    console.log("Slots bloqueados: ", blockedTimes);
 
     return NextResponse.json(blockedTimes);
   } catch (err) {

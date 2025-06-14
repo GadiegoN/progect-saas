@@ -20,6 +20,7 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { useState } from "react";
 import { AppointmentsDialog } from "./appointments-dialog";
 import { AppointmentsButtonDate } from "./appointments-button-date";
+import { Loading } from "@/components/ui/loading";
 
 export type AppointmentWithService = Prisma.AppointmentGetPayload<{
   include: {
@@ -55,8 +56,6 @@ export function AppointmentsList({ times }: AppointmentsListProps) {
       const response = await fetch(url);
 
       const json = (await response.json()) as AppointmentWithService[];
-
-      console.log(json);
 
       if (!response.ok) {
         return [];
@@ -115,9 +114,7 @@ export function AppointmentsList({ times }: AppointmentsListProps) {
         <CardContent>
           <ScrollArea className="h-[calc(100vh-20rem)] lg:h-[calc(100vh-15rem)] pb-2">
             {isLoading ? (
-              <div className="w-full h-32 flex items-center justify-center">
-                <Loader2 className="animate-spin text-primary" />
-              </div>
+              <Loading />
             ) : (
               [...times]
                 .sort((a, b) => {

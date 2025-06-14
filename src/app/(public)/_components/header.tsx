@@ -44,16 +44,18 @@ export function Header() {
 
     return (
       <ul className="flex flex-col md:flex-row gap-8">
-        <li>
-          <Link
-            href="/dashboard"
-            onClick={() => setIsOpen(false)}
-            className="hover:text-primary transition duration-200 flex items-center gap-2"
-          >
-            <LayoutDashboard />
-            {!collapsed && <span>Dashboard</span>}
-          </Link>
-        </li>
+        {isLoggedIn && (
+          <li>
+            <Link
+              href="/dashboard"
+              onClick={() => setIsOpen(false)}
+              className="hover:text-primary transition duration-200 flex items-center gap-2"
+            >
+              <LayoutDashboard />
+              {!collapsed && <span>Dashboard</span>}
+            </Link>
+          </li>
+        )}
 
         {!isLoggedIn && (
           <li>
@@ -65,21 +67,6 @@ export function Header() {
             >
               <LogIn />
               {!collapsed && <span>Login</span>}
-            </button>
-          </li>
-        )}
-
-        {isLoggedIn && (
-          <li>
-            <button
-              onClick={() => {
-                setIsOpen(false);
-                signOut();
-              }}
-              className="hover:text-primary transition duration-200 flex items-center gap-2"
-            >
-              <LogOut />
-              {!collapsed && <span>Sair</span>}
             </button>
           </li>
         )}

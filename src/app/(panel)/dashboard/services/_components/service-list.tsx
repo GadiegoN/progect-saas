@@ -47,7 +47,7 @@ export function ServiceList({ services }: ServicesListProps) {
         }
       }}
     >
-      <section className="mx-auto max-w-2xl p-4">
+      <section className="ml-2 max-w-2xl p-4">
         <Card>
           <CardHeader className="flex justify-between items-center p-4 border-b border-gray-300">
             <CardTitle className="text-xl md:text-2xl font-bold">
