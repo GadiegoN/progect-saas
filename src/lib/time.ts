@@ -1,7 +1,7 @@
 export function generateTimeSlots(): string[] {
   const timeSlots: string[] = [];
-  const startTime = 7;
-  const endTime = 18;
+  const startTime = 5;
+  const endTime = 24;
   const interval = 30;
 
   for (let hour = startTime; hour < endTime; hour++) {
