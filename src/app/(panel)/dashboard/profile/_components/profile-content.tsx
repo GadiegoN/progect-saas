@@ -57,7 +57,11 @@ export function ProfileContent({ user }: ProfileContentProps) {
       address,
       phone: extractValue,
       status: status === "active" ? true : false,
-      times: selectedHours || [],
+      times: [...selectedHours].sort((a, b) => {
+        const [aHour, aMin] = a.split(":").map(Number);
+        const [bHour, bMin] = b.split(":").map(Number);
+        return aHour - bHour || aMin - bMin;
+      }),
       timezone,
     });
 

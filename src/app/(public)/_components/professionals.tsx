@@ -10,8 +10,13 @@ import fotoImg from "../../../../public/foto1.png";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { User } from "@/generated/prisma";
 
-export function Professionals() {
+interface ProfessionalsProps {
+  professionals: User[];
+}
+
+export function Professionals({ professionals }: ProfessionalsProps) {
   return (
     <section className="flex flex-col h-full py-16" id="profissionais">
       <div className="flex flex-col px-4 mx-auto">
@@ -21,39 +26,45 @@ export function Professionals() {
         </p>
 
         <section className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 p-4">
-          <Card className="overflow-hidden shadow-md transition-transform transform hover:scale-105">
-            <CardContent>
-              <div className="relative h-48">
-                <Image
-                  src={fotoImg}
-                  alt="Card Image"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-
-              <div className="p-4 space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="w-10/12">
-                    <h3>Clinica Centro</h3>
-                    <p className="text-sm text-gray-500">
-                      Rua x, Centro, Conquista - MG
-                    </p>
-                  </div>
-
-                  <div className="size-2.5 rounded-full bg-primary" />
+          {professionals.map((professional) => (
+            <Card
+              key={professional.id}
+              className="overflow-hidden shadow-md transition-transform transform hover:scale-105"
+            >
+              <CardContent>
+                <div className="relative h-48">
+                  <Image
+                    src={professional.image ?? fotoImg}
+                    alt="Card Image"
+                    fill
+                    className="object-cover"
+                  />
                 </div>
 
-                <Link
-                  href="/agendar"
-                  className="flex bg-primary cursor-pointer justify-center text-white font-semibold px-4 py-2 rounded-md hover:bg-primary transition duration-200"
-                >
-                  Agendar Horario
-                  <ArrowRight />
-                </Link>
-              </div>
-            </CardContent>
-          </Card>
+                <div className="p-4 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="w-10/12">
+                      <h3>{professional.name}</h3>
+                      <p className="text-sm text-gray-500">
+                        {professional.address}
+                      </p>
+                    </div>
+
+                    <div className="size-2.5 rounded-full bg-green-500" />
+                  </div>
+
+                  <Link
+                    href={`/clinic/${professional.id}`}
+                    target="_blank"
+                    className="flex bg-primary cursor-pointer justify-center text-white font-semibold px-4 py-2 rounded-md hover:bg-primary transition duration-200"
+                  >
+                    Agendar Horario
+                    <ArrowRight />
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
         </section>
       </div>
     </section>
