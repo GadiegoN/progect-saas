@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { subscriptionPlans } from "@/utils/plans";
-import { cn } from "@/lib/utils"; // utilitário opcional para juntar classes condicionalmente
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 export function PlansGrid() {
