@@ -12,62 +12,80 @@ export const POST = async (req: Request) => {
     return NextResponse.error();
   }
 
-  console.log("WebHook iniciando...");
-
   const text = await req.text();
-  const event = stripe.webhooks.constructEvent(
-    text,
-    signature,
-    process.env.STRIPE_SECRET_WEBHOOK_KEY as string
-  );
 
-  switch (event.type) {
-    case "customer.subscription.deleted":
-      const payment = event.data.object as Stripe.Subscription;
-      await manageSubscription(
-        payment.id,
-        payment.customer.toString(),
-        false,
-        true
-      );
-      break;
+  let event: Stripe.Event;
 
-    case "customer.subscription.updated":
-      const paymentIntent = event.data.object as Stripe.Subscription;
-      await manageSubscription(
-        paymentIntent.id,
-        paymentIntent.customer.toString(),
-        false,
-        false
-      );
-      revalidatePath("/dashboard/plans");
-      break;
+  try {
+    event = stripe.webhooks.constructEvent(
+      text,
+      signature,
+      process.env.STRIPE_SECRET_WEBHOOK_KEY as string
+    );
+  } catch (err) {
+    console.error("Erro ao verificar assinatura do webhook:", err);
+    return NextResponse.json({ error: "Webhook inválido" }, { status: 400 });
+  }
 
-    case "checkout.session.completed":
-      const checkoutSession = event.data.object as Stripe.Checkout.Session;
-      const type = checkoutSession.metadata?.type
-        ? checkoutSession.metadata?.type
-        : "BASIC";
+  const { type, data } = event;
 
-      if (checkoutSession.subscription && checkoutSession.customer) {
+  try {
+    switch (type) {
+      case "customer.subscription.deleted": {
+        const subscription = data.object as Stripe.Subscription;
         await manageSubscription(
-          checkoutSession.subscription.toString(),
-          checkoutSession.customer.toString(),
-          true,
+          subscription.id,
+          subscription.customer.toString(),
           false,
-          type as Plan
+          true
         );
+        break;
       }
-      revalidatePath("/dashboard/plans");
-      break;
 
-    case "payment_intent.payment_failed":
-      const paymentFailed = event.data.object as Stripe.PaymentIntent;
-      console.log("checkoutSession", paymentFailed);
-      break;
+      case "customer.subscription.updated": {
+        const subscription = data.object as Stripe.Subscription;
+        await manageSubscription(
+          subscription.id,
+          subscription.customer.toString(),
+          false,
+          false
+        );
+        revalidatePath("/dashboard/plans");
+        break;
+      }
 
-    default:
-      console.log("Evento não tratado: ", event.type);
+      case "checkout.session.completed": {
+        const session = data.object as Stripe.Checkout.Session;
+        const planType = (session.metadata?.type as Plan) ?? "BASIC";
+
+        if (session.subscription && session.customer) {
+          await manageSubscription(
+            session.subscription.toString(),
+            session.customer.toString(),
+            true,
+            false,
+            planType
+          );
+          revalidatePath("/dashboard/plans");
+        }
+        break;
+      }
+
+      case "payment_intent.payment_failed": {
+        const paymentIntent = data.object as Stripe.PaymentIntent;
+        console.warn("Pagamento falhou:", paymentIntent);
+        break;
+      }
+
+      default:
+        console.log("Evento Stripe não tratado:", type);
+    }
+  } catch (err) {
+    console.error("Erro ao processar webhook:", err);
+    return NextResponse.json(
+      { error: "Erro ao processar evento" },
+      { status: 500 }
+    );
   }
 
   return NextResponse.json({ received: true });
