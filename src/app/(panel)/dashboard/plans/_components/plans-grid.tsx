@@ -8,7 +8,9 @@ import {
 } from "@/components/ui/card";
 import { subscriptionPlans } from "@/utils/plans";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { PlanSubscriptionButton } from "./plans-subscription-button";
+
+type Plan = "BASIC" | "PROFESSIONAL" | "ENTERPRISE";
 
 export function PlansGrid() {
   return (
@@ -71,12 +73,10 @@ export function PlansGrid() {
               </div>
 
               <CardFooter>
-                <Button
-                  className="w-full mt-6"
-                  variant={isPromo ? "default" : "outline"}
-                >
-                  Assinar plano
-                </Button>
+                <PlanSubscriptionButton
+                  type={plan.id as Plan}
+                  isPromo={isPromo}
+                />
               </CardFooter>
             </CardContent>
           </Card>
