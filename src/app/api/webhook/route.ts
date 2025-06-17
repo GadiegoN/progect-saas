@@ -66,8 +66,8 @@ export const POST = async (req: Request) => {
             false,
             planType
           );
-          revalidatePath("/dashboard/plans");
         }
+        revalidatePath("/dashboard/plans");
         break;
       }
 

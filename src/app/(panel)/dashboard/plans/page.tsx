@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { PlansGrid } from "./_components/plans-grid";
 import { getSubscription } from "@/utils/get-subscription";
+import { PlansSubscriptionDetails } from "./_components/plans-subscription-details";
 
 export default async function Plans() {
   const session = await getSession();
@@ -17,7 +18,9 @@ export default async function Plans() {
   return (
     <Suspense fallback={<Loading />}>
       {subscription?.status !== "active" && <PlansGrid />}
-      {subscription?.status === "active" && <h1>Assinatura ativa</h1>}
+      {subscription?.status === "active" && (
+        <PlansSubscriptionDetails subscription={subscription!} />
+      )}
     </Suspense>
   );
 }
