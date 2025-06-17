@@ -11,14 +11,21 @@ import { Service } from "@/generated/prisma";
 import { currencyFormat } from "@/utils/format-currency";
 import { deleteService } from "../_actions/delete-service";
 import { toast } from "sonner";
+import { ResultPermissionProps } from "@/utils/permissions/can-permission";
+import Link from "next/link";
 
 interface ServicesListProps {
   services: Service[];
+  permission: ResultPermissionProps;
 }
 
-export function ServiceList({ services }: ServicesListProps) {
+export function ServiceList({ services, permission }: ServicesListProps) {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [editingService, setEditingService] = useState<null | Service>(null);
+
+  const servicesList = permission.hasPermission
+    ? services
+    : services.slice(0, 1);
 
   async function handleDeleteService(serviceId: string) {
     const response = await deleteService({ serviceId: serviceId });
@@ -54,11 +61,20 @@ export function ServiceList({ services }: ServicesListProps) {
               Serviços
             </CardTitle>
 
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="h-4 w-4" />
+            {permission.hasPermission && (
+              <DialogTrigger asChild>
+                <Button>
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </DialogTrigger>
+            )}
+
+            {!permission.hasPermission && (
+              <Button variant="ghost" asChild>
+                <Link href="/dashboard/plans">Limite se serviço atingido</Link>
               </Button>
-            </DialogTrigger>
+            )}
+
             <DialogContent
               onInteractOutside={(e) => {
                 e.preventDefault();
@@ -92,7 +108,7 @@ export function ServiceList({ services }: ServicesListProps) {
 
           <CardContent>
             <section>
-              {services.map((service) => (
+              {servicesList.map((service) => (
                 <article
                   key={service.id}
                   className="flex justify-between items-center p-2 border-b hover:bg-gray-50 rounded-b-md"

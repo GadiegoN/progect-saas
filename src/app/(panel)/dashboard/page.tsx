@@ -8,6 +8,8 @@ import { Reminders } from "./_components/reminder/reminders";
 import { Appointments } from "./_components/appointments/appointments";
 import { Suspense } from "react";
 import { Loading } from "@/components/ui/loading";
+import { checkSubscriptionPermition } from "@/utils/permissions/check-subscription-permition";
+import { LabelSubscription } from "@/components/ui/label-subscription";
 
 export default async function Dashboard() {
   const session = await getSession();
@@ -15,6 +17,8 @@ export default async function Dashboard() {
   if (!session) {
     redirect("/");
   }
+
+  const subscription = await checkSubscriptionPermition(session.user.id!);
 
   return (
     <Suspense fallback={<Loading />}>
@@ -32,10 +36,22 @@ export default async function Dashboard() {
         <ButtonCopyLink userId={session.user?.id} />
       </div>
 
-      <section className="grid grid-cols-1 gap-4 lg:grid-cols-2 mt-4">
-        <Appointments userId={session.user?.id} />
-        <Reminders userId={session.user?.id} />
-      </section>
+      {subscription?.subscriptionStatus === "EXPIRED" && (
+        <LabelSubscription expired={true} />
+      )}
+
+      {subscription?.subscriptionStatus === "TRIAL" && (
+        <div>
+          <p>{subscription?.message}</p>
+        </div>
+      )}
+
+      {subscription?.subscriptionStatus !== "EXPIRED" && (
+        <section className="grid grid-cols-1 gap-4 lg:grid-cols-2 mt-4">
+          <Appointments userId={session.user?.id} />
+          <Reminders userId={session.user?.id} />
+        </section>
+      )}
     </Suspense>
   );
 }

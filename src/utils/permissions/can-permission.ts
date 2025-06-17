@@ -12,6 +12,8 @@ export type PLAN_PROP =
   | "TRIAL"
   | "EXPIRED";
 
+type TypeCheck = "service";
+
 export interface ResultPermissionProps {
   hasPermission: boolean;
   planId: string;
@@ -20,7 +22,7 @@ export interface ResultPermissionProps {
 }
 
 interface CanPErmissionProps {
-  type: string;
+  type: TypeCheck;
 }
 
 export async function canPermission({
