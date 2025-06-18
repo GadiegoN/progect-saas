@@ -16,7 +16,7 @@ import { toast } from "sonner";
 import { extractPhoneNumber } from "@/utils/format-phone";
 import { signOut, useSession } from "next-auth/react";
 import { redirect, useRouter } from "next/navigation";
-import { ProfileImage } from "@/components/ui/profile-image";
+import { ProfileImage } from "@/app/(panel)/dashboard/profile/_components/profile-image";
 
 interface ProfileContentProps {
   user: User & {
@@ -85,7 +85,7 @@ export function ProfileContent({ user }: ProfileContentProps) {
               <CardTitle className="text-xl p-4">Meu perfil</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <ProfileImage imageUrl={user.image ?? ""} />
+              <ProfileImage imageUrl={user.image} userId={user.id} />
               <div className="space-y-4 p-4">
                 <ProfileFormFields form={form} timeZones={timeZones} />
                 <ScheduleDialog

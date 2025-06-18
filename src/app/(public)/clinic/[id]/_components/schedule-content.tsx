@@ -9,7 +9,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { ProfileImage } from "@/components/ui/profile-image";
+import { ProfileImage } from "@/app/(panel)/dashboard/profile/_components/profile-image";
 import { Prisma } from "@/generated/prisma";
 import {
   AppointmentFormData,
