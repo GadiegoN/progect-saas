@@ -15,11 +15,12 @@ import {
   ChevronLeft,
   ChevronRight,
   LogOut,
+  Github,
 } from "lucide-react";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { signOut } from "@/lib/auth";
-import { handleRegister } from "../_actions/login";
+import { handleRegister, LoginType } from "../_actions/login";
+import { Button } from "@/components/ui/button";
 
 interface NavLinkProps {
   name: string;
@@ -34,9 +35,9 @@ export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  async function handleLogin(provider: string) {
+  async function handleLogin(provider: LoginType) {
     setIsOpen(false);
-    await handleRegister("github");
+    await handleRegister(provider);
   }
 
   const NavLinks = ({ collapsed }: { collapsed: boolean }) => {
@@ -58,17 +59,30 @@ export function Header() {
         )}
 
         {!isLoggedIn && (
-          <li>
-            <button
-              onClick={() => {
-                handleLogin("github");
-              }}
-              className="hover:text-primary cursor-pointer transition duration-200 flex items-center gap-2"
-            >
-              <LogIn />
-              {!collapsed && <span>Login</span>}
-            </button>
-          </li>
+          <>
+            <li>
+              <Button
+                onClick={() => {
+                  handleLogin("google");
+                }}
+                className="bg-indigo-700 hover:bg-indigo-500"
+              >
+                <LogIn />
+                {!collapsed && <span>Login com Google</span>}
+              </Button>
+            </li>
+            <li>
+              <Button
+                onClick={() => {
+                  handleLogin("github");
+                }}
+                className="bg-gray-800 hover:bg-gray-700"
+              >
+                <Github />
+                {!collapsed && <span>Login com Github</span>}
+              </Button>
+            </li>
+          </>
         )}
       </ul>
     );

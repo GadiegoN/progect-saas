@@ -10,10 +10,17 @@ import fotoImg from "../../../../public/foto1.png";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { User } from "@/generated/prisma";
+import { Prisma } from "@/generated/prisma";
+import { PremiumBadge } from "./premiun-badge";
+
+type UserWithSubscription = Prisma.UserGetPayload<{
+  include: {
+    subscription: true;
+  };
+}>;
 
 interface ProfessionalsProps {
-  professionals: User[];
+  professionals: UserWithSubscription[];
 }
 
 export function Professionals({ professionals }: ProfessionalsProps) {
@@ -39,18 +46,18 @@ export function Professionals({ professionals }: ProfessionalsProps) {
                     fill
                     className="object-cover"
                   />
+
+                  {professional?.subscription?.status && <PremiumBadge />}
                 </div>
 
-                <div className="p-4 space-y-4">
+                <div className="p-4 space-y-4 min-h-40 flex flex-col justify-between">
                   <div className="flex items-center justify-between">
                     <div className="w-10/12">
-                      <h3>{professional.name}</h3>
-                      <p className="text-sm text-gray-500">
+                      <h3 className="truncate">{professional.name}</h3>
+                      <p className="text-sm text-gray-500 line-clamp-2">
                         {professional.address}
                       </p>
                     </div>
-
-                    <div className="size-2.5 rounded-full bg-green-500" />
                   </div>
 
                   <Link
