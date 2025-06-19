@@ -16,7 +16,7 @@ import {
   useAppointmentForm,
 } from "@/hooks/use-schedule-form";
 import { formatPhone } from "@/utils/format-phone";
-import { Clock12, Loader, MapPin } from "lucide-react";
+import { Clock12, Loader, MapPin, User } from "lucide-react";
 import { DateTimePicker } from "./date-picker";
 import {
   Select,
@@ -32,6 +32,7 @@ import { ScheduleTimeList } from "./schedule-time-list";
 import { createNewAppointment } from "../_actions/create-appointments";
 import { toast } from "sonner";
 import { Loading } from "@/components/ui/loading";
+import Image from "next/image";
 
 type UserWithServiceAndSubscription = Prisma.UserGetPayload<{
   include: {
@@ -149,7 +150,23 @@ export function ScheduleContent({ clinic }: ScheduleContentProps) {
       <section className="container mx-auto px-4 -mt-16">
         <div className="max-w-2xl mx-auto">
           <article className="flex flex-col items-center gap-2">
-            <ProfileImage imageUrl={clinic.image ?? ""} />
+            <div className="relative w-48 h-48 rounded-full bg-gray-300 inset-0 border border-background shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300">
+              {!clinic.image ? (
+                <div className="w-full h-full flex items-center justify-center animate-pulse bg-gray-200">
+                  <User className="w-16 h-16 text-gray-400" />
+                </div>
+              ) : (
+                <Image
+                  src={clinic.image}
+                  alt="Foto de perfil da cliníca"
+                  fill
+                  className="object-cover"
+                  quality={100}
+                  priority
+                  sizes="(max-width: 480px) 100vw, (max-width: 1024px) 75vw, 60vw"
+                />
+              )}
+            </div>
 
             <div className="mt-4" />
 
